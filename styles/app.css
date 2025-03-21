@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@cdssnc/gcds-components-react/gcds.css";
+@import "./dir/gcds_overrides.css";
 @import "./gcforms/base.css";
 @import "./gcforms/typography.css";
 @import "./gcforms/header.css";

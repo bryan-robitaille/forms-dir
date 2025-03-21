@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Lato } from "next/font/google";
 import { Viewport } from "next";
+
 import "../styles/app.css";
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

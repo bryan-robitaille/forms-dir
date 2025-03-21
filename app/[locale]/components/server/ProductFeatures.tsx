@@ -4,7 +4,7 @@ import search from "./images/search.png";
 import simpleProfile from "./images/simple-profile.png";
 import teams from "./images/teams.png";
 import orgChart from "./images/org-chart.png";
-import newUi from "./images/newLayout.png";
+
 import { serverTranslation } from "@i18n";
 
 const Features = async ({
@@ -64,14 +64,6 @@ export const ProductFeatures = async ({ lng }: { lng: string }) => {
       imgAlt: "",
       featureHeading: t("Organizational chart"),
       description: t("Explore an entire team and find the exact person you need to talk to."),
-    },
-    {
-      img: newUi,
-      imgAlt: "",
-      featureHeading: t("New interface design"),
-      description: t(
-        "A bright-blue colour scheme, rounded elements and minimalist look make the application just a little more fun to use."
-      ),
     },
   ];
   return (

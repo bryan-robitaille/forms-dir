@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cdssnc/gcds-components": "^0.33.0",
+    "@cdssnc/gcds-components-react": "^0.33.0",
     "@cdssnc/gcds-tokens": "^2.7.1",
     "@gctools-components/aurora-css": "^0.3.3",
     "i18next": "^24.2.3",
