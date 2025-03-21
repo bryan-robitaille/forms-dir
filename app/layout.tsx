@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Noto_Sans, Lato } from "next/font/google";
 import { Viewport } from "next";
 import "../styles/app.css";
-import "@gctools-components/aurora-css/css/aurora.min.css";
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-noto-sans",
@@ -43,7 +42,7 @@ export default function RootLayout({
           <meta httpEquiv="Refresh" content="0; url='/javascript-disabled.html'" />
         </noscript>
       </head>
-      <body className={"has-[.bkd-soft]:bg-gray-soft"}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

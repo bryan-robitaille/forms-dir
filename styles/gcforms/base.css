@@ -13,11 +13,6 @@ body:has(dialog[open]) {
   overflow: hidden;
 }
 
-footer,
-header {
-  background-color: #fff;
-}
-
 #page-container {
   @apply xs:mx-4 md:mx-8 lg:mx-16 mx-32 grow shrink-0 basis-auto;
 }
@@ -27,18 +22,6 @@ header {
 }
 
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
-
-ol {
-  @apply list-decimal pl-10;
-}
-
-ul {
-  @apply list-disc pl-10;
-}
-
-li ul {
-  @apply list-circle;
-}
 
 a {
   @apply underline text-blue-dark hover:text-blue-hover;

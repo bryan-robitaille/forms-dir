@@ -19,17 +19,12 @@ const Features = async ({
   description: string;
 }) => {
   return (
-    <div className="flex flex-col mb-4">
-      <Image
-        src={img}
-        alt={alt}
-        // width={100}
-        // height={100}
-        // className="rounded-lg"
-        placeholder="blur"
-      />
-      <h3 className="text-lg font-semibold">{featureHeading}</h3>
-      <p>{description}</p>
+    <div className="flex flex-row mb-4">
+      <Image src={img} alt={alt} className="mb-3" placeholder="blur" width={200} />
+      <div>
+        <div className="text-lg font-semibold">{featureHeading}</div>
+        <p>{description}</p>
+      </div>
     </div>
   );
 };
@@ -80,7 +75,7 @@ export const ProductFeatures = async ({ lng }: { lng: string }) => {
     },
   ];
   return (
-    <div className="mt-5 mb-2 product-feature-holder">
+    <div className="mt-5 mb-2 bg-blue-50 mx-10 border rounded-2xl border-gray-75 ">
       <h2 className="text-center m-5">{t("Key features")}</h2>
       <div className="flex flex-col">
         {features.map((feature, index) => (
