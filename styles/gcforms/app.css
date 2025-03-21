@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "./_base.css";
+@import "./_typography.css";
+@import "./_header.css";
+@import "./_toast.css";
+@import "./animations.css";
+
+@config '../tailwind.config.ts';

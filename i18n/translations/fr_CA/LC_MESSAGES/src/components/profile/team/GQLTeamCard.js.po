@@ -1,0 +1,78 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-03-31 15:47-0400\n"
+"PO-Revision-Date: 2019-02-21 14:05-0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr_CA\n"
+"Language-Team: fr_CA <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: 73:27 src/components/profile/team/GQLTeamCard.js
+msgid "Supervisor"
+msgstr "Superviseur"
+
+#: 84:27 src/components/profile/team/GQLTeamCard.js
+msgid "Team"
+msgstr "Équipe"
+
+#: 92:22 src/components/profile/team/GQLTeamCard.js
+msgid "Cannot find GCID"
+msgstr ""
+
+#: 150:31 src/components/profile/team/GQLTeamCard.js
+msgid "Changesup/team"
+msgstr "Changer de superviseur"
+
+#: 161:33 src/components/profile/team/GQLTeamCard.js
+msgid "edit_team"
+msgstr "Changer de superviseur"
+
+#: 258:45 src/components/profile/team/GQLTeamCard.js
+msgid "search"
+msgstr ""
+
+#: 293:35 src/components/profile/team/GQLTeamCard.js
+msgid "next"
+msgstr "Changer de superviseur"
+
+#: 304:35 src/components/profile/team/GQLTeamCard.js
+msgid "cancel"
+msgstr "Annuler"
+
+#: 366:23 src/components/profile/team/GQLTeamCard.js
+msgid "people"
+msgstr "Coéquipiers"
+
+#: 313:45 src/components/profile/team/GQLTeamCard.js
+msgid "None"
+msgstr ""
+
+
+#: src/components/profile/team/GQLTeamCard.js 321:41
+msgid "Confirm supervisor transfer"
+msgstr "Confirmer le transfert vers un nouveau superviseur"
+
+#: src/components/profile/team/GQLTeamCard.js 321:51
+msgid "You are transferring %1$s %2$s %3$s %4$s."
+msgid_plural ""
+msgstr[0] "Vous changez votre superviseur de %1$s à %2$s. 
+
+Vous serez retiré(e) de l’équipe %3$s et déplacé(e) dans l’équipe %4$s de %2$s."
+msgstr[1] ""
+
+#: src/components/profile/team/GQLTeamCard.js 323:53
+msgid "Confirm"
+msgstr "Confirmer"
+
+msgid "You cannot be your own supervisor. Please pick someone else."
+msgstr ""
+
+msgid "No Team"
+msgstr "Aucune équipe"

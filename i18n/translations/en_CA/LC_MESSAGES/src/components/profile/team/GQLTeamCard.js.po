@@ -1,0 +1,75 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-03-31 15:47-0400\n"
+"PO-Revision-Date: 2019-02-21 14:05-0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en_CA\n"
+"Language-Team: en_CA <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: 73:27 src/components/profile/team/GQLTeamCard.js
+msgid "Supervisor"
+msgstr ""
+
+#: 84:27 src/components/profile/team/GQLTeamCard.js
+msgid "Team"
+msgstr ""
+
+#: 92:22 src/components/profile/team/GQLTeamCard.js
+msgid "Cannot find GCID"
+msgstr ""
+
+#: 150:31 src/components/profile/team/GQLTeamCard.js
+msgid "Changesup/team"
+msgstr "Change supervisor"
+
+#: 161:33 src/components/profile/team/GQLTeamCard.js
+msgid "edit_team"
+msgstr "Change supervisor "
+
+#: 258:45 src/components/profile/team/GQLTeamCard.js
+msgid "search"
+msgstr "Search"
+
+#: 293:35 src/components/profile/team/GQLTeamCard.js
+msgid "next"
+msgstr "Change supervisor"
+
+#: 304:35 src/components/profile/team/GQLTeamCard.js
+msgid "cancel"
+msgstr "Cancel"
+
+#: 366:23 src/components/profile/team/GQLTeamCard.js
+msgid "people"
+msgstr "Teammates"
+
+#: 313:45 src/components/profile/team/GQLTeamCard.js
+msgid "None"
+msgstr ""
+
+#: src/components/profile/team/GQLTeamCard.js 321:41
+msgid "Confirm supervisor transfer"
+msgstr "Confirm transfer to new supervisor"
+
+#: src/components/profile/team/GQLTeamCard.js 321:51
+msgid "You are transferring %1$s %2$s %3$s %4$s."
+msgid_plural ""
+msgstr[0] "You are transferring your supervisor from %1$s to %2$s. You will be removed from the %3$s team and be placed in %2$s’s %4$s team."
+msgstr[1] ""
+
+#: src/components/profile/team/GQLTeamCard.js 323:53
+msgid "Confirm"
+msgstr ""
+
+msgid "You cannot be your own supervisor. Please pick someone else."
+msgstr ""
+
+msgid "No Team"
+msgstr ""
