@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Profile {
+  id                  String     @id @default(cuid())
+  name                String
+  email               String
+  avatarUrl           String?
+  mobilePhone         String?
+  officePhone         String?
+  titleEn             String
+  titleFr             String
+  address             Address?
+  teamId              String     @unique
+  team                Team       @relation(fields: [teamId], references: [id], name: "TeamMembers")
+  ownerOfTeams        Team[]     @relation("TeamOwners")
+  oustandingApprovals Approval[] @relation("Approver")
+  submittedApprovals  Approval[] @relation("Submitter")
+  createdApprovals    Approval[] @relation("Creator")
+  updatedApprovals    Approval[] @relation("Updater")
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  street     String
+  city       String
+  postalCode String
+  province   String
+  country    String
+  profileId  String  @unique
+  profile    Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id                 String           @id @default(cuid())
+  nameEn             String
+  nameFr             String
+  descriptionEn      String?
+  descriptionFr      String?
+  avatarUrl          String?
+  members            Profile[]        @relation("TeamMembers")
+  owner              Profile          @relation(fields: [ownerId], references: [id], name: "TeamOwners")
+  ownerId            String
+  organization       Organization     @relation(fields: [organizationId], references: [id])
+  organizationId     String
+  supervisorApproval RequestedChange? @relation("SupervisoryApproval")
+  transferApproval   RequestedChange? @relation("OwnershipOfTeam")
+}
+
+model Organization {
+  id        String  @id @default(cuid())
+  nameEn    String
+  nameFr    String
+  acronymEn String?
+  acronymFr String?
+  teams     Team[]
+}
+
+model Approval {
+  id              String           @id @default(cuid())
+  approver        Profile          @relation(fields: [approverId], references: [id], name: "Approver")
+  approverId      String
+  submitter       Profile          @relation(fields: [submitterId], references: [id], name: "Submitter")
+  submitterId     String
+  createdAt       DateTime         @default(now())
+  createdBy       Profile          @relation(fields: [createdById], references: [id], name: "Creator")
+  createdById     String
+  updatedBy       Profile          @relation(fields: [updatedById], references: [id], name: "Updater")
+  updatedById     String
+  actionedOn      DateTime?
+  deniedComment   String?
+  status          Status
+  changeType      ChangeType
+  requestedChange RequestedChange?
+}
+
+model RequestedChange {
+  id                String   @id @default(cuid())
+  approvalId        String   @unique
+  approval          Approval @relation(fields: [approvalId], references: [id], onDelete: Cascade)
+  name              String?
+  email             String?
+  avatarUrl         String?
+  mobilePhone       String?
+  officePhone       String?
+  titleEn           String?
+  titleFr           String?
+  teamId            String?  @unique
+  team              Team?    @relation(fields: [teamId], references: [id], name: "SupervisoryApproval")
+  ownershipOfTeam   Team?    @relation(fields: [ownershipOfTeamId], references: [id], name: "OwnershipOfTeam")
+  ownershipOfTeamId String?  @unique
+}
+
+enum Status {
+  Pending
+  Approved
+  Denied
+  Revoked
+}
+
+enum ChangeType {
+  Membership
+  Informational
+  Team
+}
+
+// Auth Models
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([userId, credentialID])
+}

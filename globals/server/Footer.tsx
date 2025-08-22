@@ -7,10 +7,6 @@ interface FooterProps {
   className?: string;
 }
 
-const BulletPoint = () => {
-  return <span className="px-3">&#x2022;</span>;
-};
-
 const DefaultLinks = async () => {
   const { t } = await serverTranslation("common");
   return (
@@ -27,9 +23,9 @@ export const Footer = async ({}: FooterProps) => {
     >
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
         <div>
-          <nav aria-label={t("footer.ariaLabel")}>
+          {/* <nav aria-label={t("footer.ariaLabel")}>
             <DefaultLinks />
-          </nav>
+          </nav> */}
         </div>
 
         <div className="min-w-[168px]">

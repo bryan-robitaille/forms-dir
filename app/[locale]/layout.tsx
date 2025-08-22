@@ -10,10 +10,15 @@ export default async function AppLayout({
 }) {
   const { locale } = await params;
   return (
-    <div>
+    <div className="bkd-soft flex h-full flex-col">
       <Header locale={locale} />
-      <main className="w-full ">{children}</main>
-      <Footer />
+
+      <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
+        <main id="content" className="mb-10">
+          {children}
+        </main>
+      </div>
+      <Footer className="mt-0" />
     </div>
   );
 }

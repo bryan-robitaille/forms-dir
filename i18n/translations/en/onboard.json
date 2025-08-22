@@ -1,0 +1,54 @@
+{
+  "step1": {
+    "title": "Welcome",
+    "next": "Get Started"
+  },
+  "step2": {
+    "title": "Tell us about yourself",
+    "description": "Tell us about yourself. Does this look like you? Some information has been filled in for you when your created an account. Please tells us if something is not right by updating the form below. You can also add new information about yourself in the form below.",
+    "jobInfo": {
+      "title": "Tell us about what you do",
+      "description": "Nunc tortor urna, fermentum in gravida sit amet, fermentum non dui. Proin mi est, iaculis a metus ut, auctor ultrices metus. Nunc nibh odio, rhoncus eget tincidunt."
+    },
+    "departmentInfo": {
+      "title": "Tell us where you belong",
+      "description": "Nunc tortor urna, fermentum in gravida sit amet, fermentum non dui. Proin mi est, iaculis a metus ut, auctor ultrices metus. Nunc nibh odio, rhoncus eget tincidunt."
+    },
+    "form": {
+      "name": "Your Name",
+      "email": "Your Email",
+      "titleEn": "Your Job Title",
+      "titleFr": "Votre titre d'emploi",
+      "department": "Find your department here"
+    },
+    "next": "Next Step"
+  },
+  "step3": {
+    "title": "Tell us how to find you",
+    "description": "Let’s get some contact information from you so people can get in touch with you!",
+    "form": {
+      "street": "Street Number and Name",
+      "province": "Province",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "phone": "Mobile Phone"
+    },
+    "next": "Next Step",
+    "previous": "Back"
+  },
+  "step4": {
+    "title": "Let's get you on a team",
+    "description": "Find your supervisor here and join a team. In faucibus non est vitae lobortis. Sed sit amet dolor pretium, consequat sem et, porta risus. Proin maximus, nisl ac fringilla congue, risus mi bibendum odio, eu bibendum tellus elit eget nisi. Donec fermentum auctor congue. (Info about Department inheritance here.)",
+    "form": {
+      "supervisor": "Your supervisor awaits",
+      "team": "Join one of their awesome teams"
+    },
+    "next": "Next Step",
+    "previous": "Back"
+  },
+  "step5": {
+    "title": "Your all set",
+    "next": "View my profile"
+  }
+}

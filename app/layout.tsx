@@ -43,7 +43,7 @@ export default function RootLayout({
           <meta httpEquiv="Refresh" content="0; url='/javascript-disabled.html'" />
         </noscript>
       </head>
-      <body>{children}</body>
+      <body className={"has-[.bkd-soft]:bg-gray-soft"}>{children}</body>
     </html>
   );
 }

@@ -24,7 +24,11 @@
       "@lib/*": ["lib/*"],
       "@public/*": ["public/*"],
       "@i18n": ["i18n"],
-      "@i18n/*": ["i18n/*"]
+      "@i18n/*": ["i18n/*"],
+      "@types/*": ["types/*"],
+      "@clientComponents/*": ["globals/client/*"],
+      "@serverComponents/*": ["globals/server/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

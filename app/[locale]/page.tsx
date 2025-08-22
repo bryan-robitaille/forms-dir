@@ -1,6 +1,4 @@
 import { ProductFeatures } from "./components/server/ProductFeatures";
-import { InfoText } from "./components/server/InfoText";
-import { serverTranslation } from "@i18n";
 import { languages } from "@i18n/settings";
 import { CallToAction } from "./components/server/CallToAction";
 export async function generateStaticParams() {
