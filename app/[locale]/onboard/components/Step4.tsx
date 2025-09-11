@@ -1,18 +1,18 @@
 import { useTranslation } from "@i18n/client";
 import { useState } from "react";
-import { GcdsInput, GcdsHeading, GcdsButton } from "@cdssnc/gcds-components-react";
-import { UserData, Address } from "../types";
+import { GcdsInput, GcdsButton } from "@cdssnc/gcds-components-react";
+import { OnboardUserData } from "../types";
 
 interface Step4 {
   nextStep: () => void;
   backStep: () => void;
-  initialData: UserData;
-  update: (data: UserData) => void;
+  initialData: OnboardUserData;
+  update: (data: OnboardUserData) => void;
 }
 
 export const Step4 = ({ nextStep, initialData: userData, update, backStep }: Step4) => {
   const { t } = useTranslation("onboard");
-  const [formData, setFormData] = useState<UserData>(userData);
+  const [formData, setFormData] = useState<OnboardUserData>(userData);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();

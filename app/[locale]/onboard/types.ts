@@ -1,19 +1,17 @@
-export type Address = {
-  street: string;
-  province: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  phone: string;
-};
-
-export type UserData = {
+export type OnboardUserData = {
   name: string;
   email: string;
   titleEn: string;
   titleFr: string;
   department: string;
-  address: Address;
+  address: {
+    street: string;
+    province: string;
+    city: string;
+    postalCode: string;
+    country: string;
+    phone: string;
+  };
   supervisor: string;
   team: string;
 };

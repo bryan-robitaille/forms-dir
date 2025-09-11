@@ -6,13 +6,14 @@ import { Step2 } from "./Step2";
 import { Step3 } from "./Step3";
 import { Step4 } from "./Step4";
 import { Step5 } from "./Step5";
-import { UserData } from "../types";
+import { OnboardUserData } from "../types";
+import { onboardProfile } from "../actions";
 
 export const OnboardingProcess = () => {
   // State to track the current step of the registration flow
   const [step, setStep] = useState(1);
   // State to store form data across steps
-  const [formData, setFormData] = useState<UserData>({
+  const [formData, setFormData] = useState<OnboardUserData>({
     name: "",
     email: "",
     titleEn: "",
@@ -36,8 +37,13 @@ export const OnboardingProcess = () => {
   const handlePreviousStep = () => {
     setStep(step - 1);
   }; // Function to handle form data changes across steps
-  const handleFormDataChange = (updated: UserData) => {
+  const handleFormDataChange = (updated: OnboardUserData) => {
     setFormData({ ...formData, ...updated });
+  };
+
+  const saveData = async () => {
+    await onboardProfile(formData);
+    handleNextStep();
   };
 
   const stepComponents = [
@@ -52,7 +58,7 @@ export const OnboardingProcess = () => {
     <Step4
       initialData={formData}
       update={handleFormDataChange}
-      nextStep={handleNextStep}
+      nextStep={saveData}
       backStep={handlePreviousStep}
     />,
     <Step5 />,

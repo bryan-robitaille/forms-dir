@@ -1,17 +1,30 @@
 import { useTranslation } from "@i18n/client";
-import { useState } from "react";
-import { GcdsInput, GcdsHeading, GcdsButton } from "@cdssnc/gcds-components-react";
-import { UserData } from "../types";
+import { useState, useEffect } from "react";
+import { GcdsInput, GcdsSelect, GcdsHeading, GcdsButton } from "@cdssnc/gcds-components-react";
+import { OnboardUserData } from "../types";
+import { getOrganizations } from "../actions";
+import { useSession } from "next-auth/react";
 
 interface Step2 {
   nextStep: () => void;
-  initialData: UserData;
-  update: (data: UserData) => void;
+  initialData: OnboardUserData;
+  update: (data: OnboardUserData) => void;
 }
 
+interface Organization {
+  id: string;
+  nameEn: string;
+  nameFr: string;
+}
 export const Step2 = ({ nextStep, initialData, update }: Step2) => {
   const { t } = useTranslation("onboard");
   const [userData, setUserData] = useState(initialData);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    getOrganizations().then((orgs) => setOrganizations(orgs));
+  }, []);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +43,8 @@ export const Step2 = ({ nextStep, initialData, update }: Step2) => {
                 inputId="name"
                 label={t("step2.form.name")}
                 name="name"
-                value={userData.name}
+                value={session?.user?.name ?? userData.name}
+                disabled={Boolean(session?.user?.name)}
                 onGcdsChange={(e) => {
                   setUserData((data) => ({
                     ...data,
@@ -45,7 +59,8 @@ export const Step2 = ({ nextStep, initialData, update }: Step2) => {
                 label={t("step2.form.email")}
                 name="email"
                 type="email"
-                value={userData.email}
+                disabled={Boolean(session?.user?.email)}
+                value={session?.user?.email ?? userData.email}
                 onGcdsChange={(e) => {
                   setUserData((data) => ({
                     ...data,
@@ -95,17 +110,22 @@ export const Step2 = ({ nextStep, initialData, update }: Step2) => {
           <p>{t("step2.departmentInfo.description")}</p>
           <div className="flex flex-row pt-4 gap-6">
             <div className="basis-1/2">
-              <GcdsInput
-                inputId="department"
+              <GcdsSelect
+                selectId="department"
                 label={t("step2.form.department")}
                 name="department"
+                defaultValue={t("step2.form.select")}
                 onGcdsChange={(e) => {
                   setUserData((data) => ({
                     ...data,
                     department: e.target.value ?? "",
                   }));
                 }}
-              />
+              >
+                {organizations.map((organization) => (
+                  <option value={organization.id}>{organization.nameEn}</option>
+                ))}
+              </GcdsSelect>
             </div>
           </div>
         </div>

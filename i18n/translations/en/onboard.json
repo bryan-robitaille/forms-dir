@@ -19,7 +19,8 @@
       "email": "Your Email",
       "titleEn": "Your Job Title",
       "titleFr": "Votre titre d'emploi",
-      "department": "Find your department here"
+      "department": "Find your department here",
+      "select": "Select a Department"
     },
     "next": "Next Step"
   },
