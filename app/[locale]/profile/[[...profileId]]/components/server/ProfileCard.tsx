@@ -6,11 +6,11 @@ interface ProfileCard {
 export const ProfileCard = async ({ profile }: ProfileCard) => {
   return (
     <div className="flex flex-row gap-6">
-      <div className="d-flex justify-content-center">
+      <div className="justify-center">
         <img
-          className="w-40 h-40 rounded-full ring-6 ring-gray-300 dark:ring-gray-500"
-          src={profile.avatarUrl ?? undefined}
-          alt="Profile Avatar"
+          className="w-40 h-40 object-cover rounded-full ring-6 ring-gray-300 dark:ring-gray-500"
+          src={profile.avatarUrl ?? "/images/avatar-default.svg"}
+          alt="Profile Image"
         />
       </div>
       <div>

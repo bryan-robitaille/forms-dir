@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@lib/prisma";
+import { logMessage } from "@lib/logger";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: process.env.NODE_ENV === "development",
@@ -24,37 +25,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   // When building the app use a random UUID as the token secret
   secret: process.env.AUTH_SECRET ?? crypto.randomUUID(),
   session: {
-    strategy: "jwt",
+    strategy: "database",
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 2 * 60 * 60, // 2 hours
     updateAge: 30 * 60, // 30 minutes
   },
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
-  callbacks: {
-    async jwt({ token, user, profile, account }) {
-      // account is only available on the first call to the JWT function
-      if (account?.provider) {
-        const gcProfile = await prisma.profile.findUnique({
+  events: {
+    async signIn({ profile, user }) {
+      await prisma.profile
+        .update({
           where: {
             id: user.id,
           },
-        });
-
-        // update profile photo
-        if (gcProfile !== null) {
-          await prisma.profile.update({
-            where: {
-              id: user.id,
-            },
-            data: {
-              avatarUrl: profile?.avatarUrl as string,
-            },
-          });
-        }
-      }
-
-      return token;
+          data: {
+            avatarUrl: profile?.picture,
+          },
+        })
+        .catch((e) => logMessage.error(e));
+    },
+  },
+  callbacks: {
+    async session(params) {
+      const { session, user } = params;
+      // Add info like 'role' to session object
+      session.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        emailVerified: user.emailVerified,
+      };
+      return session;
     },
 
     async redirect({ url, baseUrl }) {

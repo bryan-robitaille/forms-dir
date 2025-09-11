@@ -1,11 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Team } from "./Team";
-
-type TeamsProps = {
-  userName: string;
-  isSupervisor: boolean;
-};
 
 const tab =
   "bg-white-default text-gcds-blue-800 visited:text-gcds-blue-800 hover:bg-gcds-blue-100 hover:text-gcds-blue-800 active:border-black";
@@ -18,40 +13,54 @@ enum panelState {
   Approvals = "approvals",
 }
 
-export const ProfilePanel = ({ userName, isSupervisor }: TeamsProps) => {
+type PanelProps = {
+  tab: panelState;
+};
+const Panel = ({ tab }: PanelProps) => {
+  switch (tab) {
+    case panelState.User:
+      return <Team />;
+    case panelState.OrgChart:
+      return <div>OrgChart Component</div>;
+  }
+};
+
+type ProfilePanelProps = {
+  userName: string;
+  isSupervisor: boolean;
+};
+export const ProfilePanel = ({ userName, isSupervisor }: ProfilePanelProps) => {
   const [tab, setTab] = useState<panelState>(panelState.User);
 
   const userMenu = (
-    <button className={tab === "user" ? activeTab : tab} onClick={() => setTab(panelState.User)}>
+    <button
+      key="user"
+      className={tab === panelState.User ? activeTab : tab}
+      onClick={() => setTab(panelState.User)}
+    >
       {userName}
     </button>
   );
   const orgChartMenu = (
     <button
-      className={tab === "orgChart" ? activeTab : tab}
+      key="orgChart"
+      className={tab === panelState.OrgChart ? activeTab : tab}
       onClick={() => setTab(panelState.OrgChart)}
     >
       Org Chart
     </button>
   );
 
-  const menuOptions = [userMenu, orgChartMenu];
-  const supervisorMenuOptions = [userMenu, "teams", "approvals", orgChartMenu];
-
-  const panelItems = {
-    user: Team,
-    orgChart: () => <div>Org Chart Component</div>,
-    teams: () => <div>Teams Component</div>,
-    approvals: () => <div>Approvals Component</div>,
-  };
-
   return (
     <div className="h-full flex flex-col">
       <div className="flex flex-row gap-4 ">
-        {isSupervisor ? supervisorMenuOptions : menuOptions}
+        {userMenu}
+        {orgChartMenu}
       </div>
       <div className="bg-gcds-gray-50 flex-grow">
-        <div className="my-1 mx-6">{panelItems[tab]()}</div>
+        <div className="my-1 mx-6">
+          <Panel tab={tab} />
+        </div>
       </div>
     </div>
   );

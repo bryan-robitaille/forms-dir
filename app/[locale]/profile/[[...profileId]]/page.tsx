@@ -3,21 +3,26 @@ import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
 import { ProfileCard } from "./components/server/ProfileCard";
 import { ProfilePanel } from "./components/ProfilePanel";
+
 export async function generateStaticParams() {
   return languages.map((locale) => ({ locale }));
 }
 
 export default async function Profile(props: {
-  params: Promise<{ locale: string; profile_id?: string }>;
+  params: Promise<{ locale: string; profileId?: string | string[] }>;
 }) {
-  const { locale, profile_id } = await props.params;
+  const { locale, profileId } = await props.params;
+
   const session = await auth();
+
+  const userProfileId = Array.isArray(profileId) ? profileId[0] : profileId;
+
   if (!session || !session.user?.name) {
     throw new Error("Must be Authenticated");
   }
-  const profile = await prisma.profile.findFirst({
+  const profile = await prisma.profile.findUnique({
     where: {
-      id: profile_id ?? session.user?.id,
+      id: userProfileId ?? session.user.id,
     },
     include: {
       address: true,
@@ -39,7 +44,7 @@ export default async function Profile(props: {
       {profile.address && <ProfileCard profile={profile} />}
       <div className="border-black pb-4 border-b-1" />
       <h2>Teams</h2>
-      <ProfilePanel userName={session.user.name} isSupervisor={profile.ownerOfTeams.length > 1} />
+      <ProfilePanel userName={profile.name} isSupervisor={profile.ownerOfTeams.length > 1} />
     </div>
   );
 }

@@ -20,7 +20,7 @@ async function seed() {
         const name = faker.person.fullName();
         const data: Prisma.ProfileCreateInput = {
           name: name,
-          email: `${name}_${index % 10}@${organization}.gc.ca`,
+          email: `${name}_${index % 10}@${organization.acronymEn}-${organization.acronymFr}.gc.ca`,
           titleEn: faker.person.jobTitle(),
           titleFr: fakerFr.person.jobTitle(),
           avatarUrl: faker.image.personPortrait(),
