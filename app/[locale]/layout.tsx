@@ -13,8 +13,8 @@ export default async function AppLayout({
     <div className="bkd-soft flex h-full flex-col">
       <Header locale={locale} />
 
-      <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-        <main id="content" className="mb-10">
+      <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64  flex flex-col">
+        <main id="content" className="mb-10 h-full">
           {children}
         </main>
       </div>

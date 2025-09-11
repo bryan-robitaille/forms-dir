@@ -1,11 +1,21 @@
-import { signIn } from "@/auth";
+"use client";
+import { signIn} from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export const Login = ({ language = "en" }) => {
+  const { data, status } = useSession();
+
+  if (status === "loading") {
+    return;
+  }
+
+  if (status === "authenticated") {
+    return <div>{`Hello ${data.user?.name}`}</div>;
+  }
   return (
     <form
       action={async () => {
-        "use server";
-        await signIn("gcAccount", { redirectTo: `/${language}` });
+        signIn("gcAccount", { redirectTo: `/${language}` });
       }}
     >
       <button

@@ -5,7 +5,8 @@ import Image from "next/image";
 import SiteLogo from "@public/images/teams.png";
 
 import LanguageToggle from "./LanguageToggle";
-import { Login } from "./Login";
+import { Login } from "@clientComponents/Login";
+import { LogOut } from "@clientComponents/LogOut";
 
 type HeaderParams = {
   locale: string;
@@ -43,7 +44,14 @@ export const Header = async ({ locale }: HeaderParams) => {
             aria-label={t("mainNavAriaLabel", { ns: "common" })}
           >
             <ul className="mt-2 flex list-none px-0 text-base">
-              <Login />
+              <li className="mr-2 py-2 tablet:mr-4">
+                <Login />
+              </li>
+            </ul>
+            <ul className="mt-2 flex list-none px-0 text-base">
+              <li className="mr-2 py-2 tablet:mr-4">
+                <LogOut />
+              </li>
             </ul>
             <ul className="mt-2 flex list-none px-0 text-base">
               {

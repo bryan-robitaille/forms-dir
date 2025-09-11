@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "prisma db seed && next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "tsx prisma/seed.ts && tsx prisma/seedProfile.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -14,7 +15,9 @@
     "@cdssnc/gcds-components-react": "^0.33.0",
     "@cdssnc/gcds-tokens": "^2.7.1",
     "@gctools-components/aurora-css": "^0.3.3",
-    "@prisma/client": "6.5.0",
+    "@latest": "link:@prisma/client/@latest",
+    "@prisma/client": "6.15.0",
+    "@prisma/extension-accelerate": "^2.0.2",
     "clsx": "^2.1.1",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
@@ -32,6 +35,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@faker-js/faker": "^10.0.0",
     "@tailwindcss/postcss": "^4.0.14",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -41,8 +45,9 @@
     "eslint-config-next": "15.2.3",
     "postcss": "^8.4.32",
     "prettier": "^3.5.3",
-    "prisma": "^6.5.0",
+    "prisma": "^6.16.0",
     "tailwindcss": "^4.0.14",
+    "tsx": "^4.20.5",
     "typescript": "^5"
   },
   "prettier": {
@@ -53,5 +58,5 @@
     "semi": true,
     "singleQuote": false
   },
-  "packageManager": "pnpm@9.13.2+sha512.88c9c3864450350e65a33587ab801acf946d7c814ed1134da4a924f6df5a2120fd36b46aab68f7cd1d413149112d53c7db3a4136624cfd00ff1846a0c6cef48a"
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }
