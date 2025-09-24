@@ -8,7 +8,7 @@ export const ProfileCard = async ({ profile }: ProfileCard) => {
     <div className="flex flex-row gap-6">
       <div className="justify-center">
         <img
-          className="w-40 h-40 object-cover rounded-full ring-6 ring-gray-300 dark:ring-gray-500"
+          className="w-40 h-40object-cover rounded-full ring-6 ring-gray-300 dark:ring-gray-500"
           src={profile.avatarUrl ?? "/images/avatar-default.svg"}
           alt="Profile Image"
         />

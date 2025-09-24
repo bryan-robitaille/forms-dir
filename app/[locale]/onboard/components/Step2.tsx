@@ -123,7 +123,9 @@ export const Step2 = ({ nextStep, initialData, update }: Step2) => {
                 }}
               >
                 {organizations.map((organization) => (
-                  <option value={organization.id}>{organization.nameEn}</option>
+                  <option key={organization.id} value={organization.id}>
+                    {organization.nameEn}
+                  </option>
                 ))}
               </GcdsSelect>
             </div>

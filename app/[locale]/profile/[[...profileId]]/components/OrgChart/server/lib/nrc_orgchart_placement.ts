@@ -9,6 +9,70 @@
  */
 
 import { getSize, getSortingNumber, getBounds } from "./func";
+import { Prisma } from "@lib/prisma";
+
+const profileFrag = {
+  id: true,
+  name: true,
+  avatarUrl: true,
+  titleEn: true,
+  titleFr: true,
+};
+
+const teamFrag = {
+  id: true,
+  nameEn: true,
+  nameFr: true,
+};
+
+export const prismaSelectQuery = {
+  select: {
+    ...profileFrag,
+    ownerOfTeams: {
+      select: {
+        ...teamFrag,
+        members: {
+          select: profileFrag,
+        },
+      },
+    },
+    team: {
+      select: {
+        ...teamFrag,
+        owner: {
+          select: profileFrag,
+        },
+        members: {
+          select: profileFrag,
+        },
+      },
+    },
+  },
+};
+
+export type NodeProfile = {
+  uuid: string;
+  gcID: string;
+  name: string;
+  avatar?: string | null;
+  titleEn?: string;
+  titleFr?: string;
+  organization: {
+    nameEn: string;
+    nameFr: string;
+    id: string;
+  };
+  direct_reports: NodeProfile[];
+  parent?: NodeProfile;
+  root: boolean;
+};
+
+type ProfileWithRelations = Prisma.ProfileGetPayload<typeof prismaSelectQuery>;
+
+type TeamWithRelations = ProfileWithRelations["team"];
+
+type ProfileFrag = Pick<Profile, "id" | "name" | "avatarUrl" | "titleEn" | "titleFr">;
+type TeamFrag = Pick<Team, "id" | "nameEn" | "nameFr">;
 
 /**
  *
@@ -159,8 +223,8 @@ export const computePositions = ({
   cardPadding,
   leftGutter,
   withPath,
-}) => {
-  const getCoord = (row, col) => ({
+}: calculateTreeOptions) => {
+  const getCoord = (row: number, col: number) => ({
     x: cardPadding + col * (cardWidth + cardPadding),
     y: cardPadding + row * (cardHeight + cardPadding),
   });
@@ -178,7 +242,7 @@ export const computePositions = ({
    * @param {*} opt
    */
   const computeLine = (parent, child, opt, buf) => {
-    const getMiddle = (obj) => {
+    const getMiddle = (obj: NodeProfile) => {
       const middle =
         Math.floor(
           (Math.max.apply(
@@ -742,7 +806,7 @@ export const computePositions = ({
  * @param {} child
  * @param {*} a
  */
-export const addLinkToParent = (child, a) => {
+export const addLinkToParent = (child: NodeProfile, a?: NodeProfile) => {
   const obj = child;
   const parent = a || child;
   obj.parent = parent;
@@ -771,8 +835,8 @@ export const resetTree = (node) => {
  * Create a recursive copy of the supplied node.
  * @param {object} node
  */
-export const copyNode = (node) => {
-  const newNode = Object.assign({}, node, { direct_reports: [], parent: null });
+export const copyNode = (node: NodeProfile) => {
+  const newNode: NodeProfile = Object.assign({}, node, { direct_reports: [], parent: null });
   node.direct_reports.forEach((child) => newNode.direct_reports.push(copyNode(child)));
   return newNode;
 };
@@ -782,13 +846,13 @@ export const copyNode = (node) => {
  * @param {object} node
  * @param {string} uuid
  */
-export const getNode = (node, uuid) => {
+export const getNode = (node: NodeProfile, uuid: string): NodeProfile | undefined => {
   if (node.uuid === uuid) return node;
   for (let x = 0; x < node.direct_reports.length; x += 1) {
     const n = getNode(node.direct_reports[x], uuid);
     if (n) return n;
   }
-  return false;
+  return undefined;
 };
 
 /**
@@ -797,8 +861,20 @@ export const getNode = (node, uuid) => {
  * @param {*} nodeB  Node to draw path to, defaults to "root"
  * @param {*} root   Root of the tree
  */
-export const calculateTree = (options) => {
-  const opt = Object.assign(
+
+interface calculateTreeOptions {
+  root: NodeProfile;
+  nodeA: { uuid: string } | undefined;
+  nodeB: { uuid: string } | undefined;
+  cardHeight: number;
+  cardWidth: number;
+  cardPadding: number;
+  leftGutter: number;
+  withPath: boolean;
+}
+
+export const calculateTree = (options: calculateTreeOptions) => {
+  const opt: calculateTreeOptions = Object.assign(
     {
       nodeA: undefined,
       nodeB: undefined,
@@ -828,13 +904,13 @@ export const calculateTree = (options) => {
  * @param {} profile GraphQL Profile object
  * @param {*} team GraphQL Team object
  */
-export const profileToNode = (profile, team) =>
+export const profileToNode = (locale: string, profile: ProfileFrag, team: TeamFrag): NodeProfile =>
   profile
     ? {
-        uuid: profile.gcID,
-        gcID: profile.gcID,
+        uuid: profile.id,
+        gcID: profile.id,
         name: profile.name,
-        avatar: profile.avatar,
+        avatar: profile.avatarUrl,
         titleEn: profile.titleEn,
         titleFr: profile.titleFr,
         organization: {
@@ -848,7 +924,7 @@ export const profileToNode = (profile, team) =>
     : {
         uuid: "team",
         gcID: "team",
-        name: team.nameEn,
+        name: locale === "en" ? team.nameEn : team.nameFr,
         organization: {
           nameEn: team.nameEn,
           nameFr: team.nameFr,
@@ -858,13 +934,14 @@ export const profileToNode = (profile, team) =>
         root: false,
       };
 
-/**
- * Given a team convert to a profile node suitable for placement.
- * @param {*} team GraphQL Team object
- */
-export const teamToNode = (team) => {
-  const root = profileToNode(team.owner, team);
-  team.members.forEach((m) => root.direct_reports.push(profileToNode(m, team)));
+export const teamToNode = (team: TeamWithRelations, locale: string) => {
+  if (!team) {
+    throw new Error("Team is null, cannot create root node.");
+  }
+  const root = profileToNode(locale, team.owner, team);
+  team.members.forEach((m: ProfileFrag) =>
+    root.direct_reports.push(profileToNode(locale, m, team))
+  );
   return root;
 };
 
@@ -873,7 +950,12 @@ const defaultCardWidth = 350;
 const defaultCardPadding = 60;
 const defaultMiniCardHeight = 10;
 const defaultLeftGutter = 0;
-const getMiniWidth = (miniCardWidth, miniCardHeight, cardWidth, cardHeight) =>
+const getMiniWidth = (
+  miniCardWidth: number | undefined,
+  miniCardHeight: number,
+  cardWidth: number | undefined,
+  cardHeight: number | undefined
+) =>
   miniCardWidth ||
   (miniCardHeight * (cardWidth || defaultCardWidth)) / (cardHeight || defaultCardHeight);
 
@@ -891,6 +973,17 @@ export const calculateOrgChart = ({
   miniCardWidth,
   miniCardHeight,
   miniCardPadding,
+}: {
+  root: NodeProfile;
+  nodeA: { uuid: string };
+  nodeB?: { uuid: string };
+  cardHeight?: number;
+  cardWidth?: number;
+  cardPadding?: number;
+  leftGutter?: number;
+  miniCardWidth?: number;
+  miniCardHeight?: number;
+  miniCardPadding?: number;
 }) => {
   const miniHeight = miniCardHeight || defaultMiniCardHeight;
   const miniWidth = getMiniWidth(miniCardWidth, miniHeight, cardWidth, cardHeight);
@@ -921,8 +1014,6 @@ export const calculateOrgChart = ({
     cardWidth: miniWidth,
     cardPadding: miniCardPadding || defaultMiniCardHeight,
     leftGutter: 0,
-    //  (miniWidth / (cardWidth || defaultCardWidth)) *
-    //  (leftGutter || defaultLeftGutter),
     withPath,
   });
   return {
@@ -931,14 +1022,4 @@ export const calculateOrgChart = ({
     miniboxes,
     minilines,
   };
-};
-
-export const graphQLToNode = (profile) => {
-  const { team } = profile;
-  const root = team ? teamToNode(team) : profileToNode(profile, profile.ownerOfTeams[0]);
-  const node = getNode(root, profile.gcID);
-  profile.ownerOfTeams.forEach((t) =>
-    t.members.forEach((p) => node.direct_reports.push(profileToNode(p, t)))
-  );
-  return root;
 };

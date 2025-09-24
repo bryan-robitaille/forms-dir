@@ -14,7 +14,7 @@ export const Footer = async ({}: FooterProps) => {
       className="flex-none border-0 bg-gray-100 px-[1rem] tablet:px-[4rem] py-0 lg:mt-10 laptop:px-32"
       data-testid="footer"
     >
-      <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
+      <div className="flex flex-row items-center justify-between py-5 lg:flex-col lg:items-start lg:gap-4">
         <div>
           {/* <nav aria-label={t("footer.ariaLabel")}>
             <DefaultLinks />

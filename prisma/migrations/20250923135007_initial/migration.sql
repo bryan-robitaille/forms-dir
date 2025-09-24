@@ -32,6 +32,7 @@ CREATE TABLE "Team" (
     "descriptionEn" TEXT,
     "descriptionFr" TEXT,
     "avatarUrl" TEXT,
+    "defaultTeam" BOOLEAN DEFAULT false,
     "ownerId" TEXT NOT NULL,
     "organizationId" TEXT NOT NULL,
     CONSTRAINT "Team_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Profile" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,

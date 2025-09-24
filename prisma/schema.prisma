@@ -45,6 +45,7 @@ model Team {
   descriptionEn      String?
   descriptionFr      String?
   avatarUrl          String?
+  defaultTeam        Boolean?        @default(false)
   members            Profile[]        @relation("TeamMembers")
   owner              Profile          @relation(fields: [ownerId], references: [id], name: "TeamOwners")
   ownerId            String

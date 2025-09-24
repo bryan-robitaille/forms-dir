@@ -27,6 +27,7 @@ export const onboardProfile = AuthenticatedAction(async (session, formData: Onbo
         create: {
           nameEn: "Default Team",
           nameFr: "Équipe par défaut",
+          defaultTeam: true,
           organization: { connect: { id: formData.department } },
         },
       },
@@ -42,4 +43,53 @@ export const getOrganizations = AuthenticatedAction(async () => {
       nameFr: true,
     },
   });
+});
+
+export const searchSupervisor = AuthenticatedAction(
+  async (_, partialName: string, orgId: string) => {
+    return prisma.team
+      .findMany({
+        where: {
+          organizationId: orgId,
+          defaultTeam: true,
+          owner: {
+            name: {
+              startsWith: partialName,
+            },
+          },
+        },
+        select: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              avatarUrl: true,
+              titleEn: true,
+              titleFr: true,
+            },
+          },
+        },
+      })
+      .then((results) => results.map((result) => result.owner));
+  }
+);
+
+export const getSupervisorTeams = AuthenticatedAction(async (_, supervisorId: string) => {
+  return prisma.profile
+    .findUniqueOrThrow({
+      where: {
+        id: supervisorId,
+      },
+      select: {
+        ownerOfTeams: {
+          select: {
+            nameEn: true,
+            nameFr: true,
+            id: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    })
+    .then((results) => results.ownerOfTeams.map((team) => team));
 });

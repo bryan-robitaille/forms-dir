@@ -49,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async session(params) {
       const { session, user } = params;
-      // Add info like 'role' to session object
+
       session.user = {
         id: user.id,
         name: user.name,

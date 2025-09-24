@@ -1,16 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
-import './css/org_chart.css';
+"use client";
+import React from "react";
+import PropTypes from "prop-types";
+import { Button } from "reactstrap";
+import "./css/org_chart.css";
 
-import CardContainer from '../CardContainer/CardContainer';
-import MiniChart from '../MiniChart';
+import CardContainer from "../CardContainer/CardContainer";
+import MiniChart from "../MiniChart";
 
-const cssPrefix = 'react-gc-orgchart-wrapper';
+const cssPrefix = "react-gc-orgchart-wrapper";
 
-const Menu = props => (
-  <div className={`${cssPrefix}-menu`}>{props.children}</div>
-);
+const Menu = (props) => <div className={`${cssPrefix}-menu`}>{props.children}</div>;
 
 Menu.propTypes = {
   children: PropTypes.node.isRequired,
@@ -36,12 +35,8 @@ class OrgChart extends React.Component {
     this.miniScrollHeight = 0;
     this.miniScrollWidth = 0;
     this.onWindowResize = () => {
-      const { clientWidth, clientHeight }
-        = this.cardContainer.current.container.current;
-      if (
-        clientWidth !== this.state.clientWidth ||
-        clientHeight !== this.state.clientHeight
-      ) {
+      const { clientWidth, clientHeight } = this.cardContainer.current.container.current;
+      if (clientWidth !== this.state.clientWidth || clientHeight !== this.state.clientHeight) {
         this.trackScrolling({
           target: this.cardContainer.current.container.current,
         });
@@ -58,7 +53,7 @@ class OrgChart extends React.Component {
 
   componentDidMount() {
     this.updateMiniChartSize();
-    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener("resize", this.onWindowResize);
   }
 
   componentWillReceiveProps(next) {
@@ -68,24 +63,18 @@ class OrgChart extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.onWindowResize);
+    window.removeEventListener("resize", this.onWindowResize);
   }
 
   getMiniChartOffsetCoordinates() {
-    const x1 = (this.state.scrollX / this.state.scrollWidth)
-    * this.miniScrollWidth || 0;
-    const y1 = (this.state.scrollY / this.state.scrollHeight)
-      * this.miniScrollHeight || 0;
-    const x2 = (
-      (
-        (this.state.clientWidth + this.state.scrollX)
-        / this.state.scrollWidth
-      ) * this.miniScrollWidth) || 0;
-    const y2 = (
-      (
-        (this.state.clientHeight + this.state.scrollY)
-        / this.state.scrollHeight
-      ) * this.miniScrollHeight) || 0;
+    const x1 = (this.state.scrollX / this.state.scrollWidth) * this.miniScrollWidth || 0;
+    const y1 = (this.state.scrollY / this.state.scrollHeight) * this.miniScrollHeight || 0;
+    const x2 =
+      ((this.state.clientWidth + this.state.scrollX) / this.state.scrollWidth) *
+        this.miniScrollWidth || 0;
+    const y2 =
+      ((this.state.clientHeight + this.state.scrollY) / this.state.scrollHeight) *
+        this.miniScrollHeight || 0;
     return {
       x1,
       x2,
@@ -97,14 +86,12 @@ class OrgChart extends React.Component {
   updateMiniChartSize() {
     const { current } = this.miniChartComponent;
     const cards = this.props.miniCards;
-    this.miniChartSvgHeight = Math.max(0, ...cards.map(b => b.y))
-    + ((cards.length) ? cards[0].height : 0);
+    this.miniChartSvgHeight =
+      Math.max(0, ...cards.map((b) => b.y)) + (cards.length ? cards[0].height : 0);
 
     if (current) {
-      this.miniClientHeight
-        = Math.min(current.clientHeight, this.miniChartSvgHeight);
-      this.miniScrollHeight
-        = Math.min(current.scrollHeight, this.miniChartSvgHeight);
+      this.miniClientHeight = Math.min(current.clientHeight, this.miniChartSvgHeight);
+      this.miniScrollHeight = Math.min(current.scrollHeight, this.miniChartSvgHeight);
       this.miniClientWidth = current.clientWidth;
       this.miniScrollWidth = current.scrollWidth;
     }
@@ -120,12 +107,7 @@ class OrgChart extends React.Component {
       clientHeight: target.clientHeight,
     });
     if (this.miniChartComponent.current) {
-      const {
-        x1,
-        x2,
-        y1,
-        y2,
-      } = this.getMiniChartOffsetCoordinates();
+      const { x1, x2, y1, y2 } = this.getMiniChartOffsetCoordinates();
       const { current } = this.miniChartComponent;
       const diffX2 = x2 - (current.scrollLeft + current.clientWidth);
       const diffX1 = x1 - current.scrollLeft;
@@ -148,7 +130,7 @@ class OrgChart extends React.Component {
         this.miniChartComponent.current.scrollTo({
           top: newTop,
           left: newLeft,
-          behavior: 'auto',
+          behavior: "auto",
         });
       }
     }
@@ -200,35 +182,39 @@ class OrgChart extends React.Component {
       const stepY = overlayHeight / 2;
 
       switch (e.keyCode) {
-        case 37: { // left
+        case 37: {
+          // left
           this.scrollContainerToOverlayCoord(
-            (coord.x1 + (overlayWidth / 2)) - stepX,
+            coord.x1 + overlayWidth / 2 - stepX,
             // eslint-disable-next-line comma-dangle
-            coord.y1 + (overlayHeight / 2)
+            coord.y1 + overlayHeight / 2
           );
           break;
         }
-        case 38: { // up
+        case 38: {
+          // up
           this.scrollContainerToOverlayCoord(
-            coord.x1 + (overlayWidth / 2),
+            coord.x1 + overlayWidth / 2,
             // eslint-disable-next-line comma-dangle
-            (coord.y1 + (overlayHeight / 2)) - stepY
+            coord.y1 + overlayHeight / 2 - stepY
           );
           break;
         }
-        case 39: { // right
+        case 39: {
+          // right
           this.scrollContainerToOverlayCoord(
-            (coord.x1 + (overlayWidth / 2)) + stepX,
+            coord.x1 + overlayWidth / 2 + stepX,
             // eslint-disable-next-line comma-dangle
-            coord.y1 + (overlayHeight / 2)
+            coord.y1 + overlayHeight / 2
           );
           break;
         }
-        case 40: { // down
+        case 40: {
+          // down
           this.scrollContainerToOverlayCoord(
-            coord.x1 + (overlayWidth / 2),
+            coord.x1 + overlayWidth / 2,
             // eslint-disable-next-line comma-dangle
-            (coord.y1 + (overlayHeight / 2)) + stepY
+            coord.y1 + overlayHeight / 2 + stepY
           );
           break;
         }
@@ -243,8 +229,8 @@ class OrgChart extends React.Component {
     const coord = this.getMiniChartOffsetCoordinates();
     const overlayWidth = Math.abs(coord.x2 - coord.x1);
     const overlayHeight = Math.abs(coord.y2 - coord.y1);
-    const newX1 = Math.max(x - (overlayWidth / 2), 0);
-    const newY1 = Math.max(y - (overlayHeight / 2), 0);
+    const newX1 = Math.max(x - overlayWidth / 2, 0);
+    const newY1 = Math.max(y - overlayHeight / 2, 0);
 
     const newLeft = (newX1 / this.miniScrollWidth) * this.state.scrollWidth;
     const newTop = (newY1 / this.miniScrollHeight) * this.state.scrollHeight;
@@ -253,7 +239,7 @@ class OrgChart extends React.Component {
       top: newTop,
       left: newLeft,
       // eslint-disable-next-line comma-dangle
-      behavior: 'auto'
+      behavior: "auto",
     });
   }
 
@@ -266,13 +252,8 @@ class OrgChart extends React.Component {
         this.getMiniChartOffsetCoordinates()
       );
       return (
-        <div
-          className={`${cssPrefix}-minichart-wrapper`}
-        >
-          <div
-            ref={this.miniChartComponent}
-            className={`${cssPrefix}-minichart`}
-          >
+        <div className={`${cssPrefix}-minichart-wrapper`}>
+          <div ref={this.miniChartComponent} className={`${cssPrefix}-minichart`}>
             <MiniChart
               cardComponent={this.props.miniCardComponent}
               selectedNode={this.props.miniSelectedNode}
@@ -293,22 +274,20 @@ class OrgChart extends React.Component {
 
   render() {
     const UseMenu = this.props.menuComponent || Menu;
-    const MoveToActive = this.props.moveToActiveComponent || (props => (
-      <Button {...props}>{
-        this.props.moveToActiveText || __('Go to me')}
-      </Button>
-    ));
-    const searchComponent =
-      (this.props.searchComponent) ? this.props.searchComponent : undefined;
+    const MoveToActive =
+      this.props.moveToActiveComponent ||
+      ((props) => <Button {...props}>{this.props.moveToActiveText || __("Go to me")}</Button>);
+    const searchComponent = this.props.searchComponent ? this.props.searchComponent : undefined;
 
     return (
       <div>
         {this.renderMiniChart()}
-        {!this.props.hideMenuComponent &&
-        <UseMenu>
-          <MoveToActive onClick={this.handleCentreClick} />
-          {searchComponent}
-        </UseMenu>}
+        {!this.props.hideMenuComponent && (
+          <UseMenu>
+            <MoveToActive onClick={this.handleCentreClick} />
+            {searchComponent}
+          </UseMenu>
+        )}
         <div className={`${cssPrefix}-chart`}>
           <CardContainer
             selectedCard={this.props.selectedCard}
@@ -339,8 +318,8 @@ OrgChart.defaultProps = {
   onCardClick: (card, event) => {}, // eslint-disable-line no-unused-vars
   onButtonClick: (card, event) => {}, // eslint-disable-line no-unused-vars
   cardLabel: undefined,
-  buttonTitle: '!name!',
-  avatarText: '!name!',
+  buttonTitle: "!name!",
+  avatarText: "!name!",
   cardHeight: 75,
   cardWidth: 300,
   cardClickUrl: undefined,
@@ -356,7 +335,7 @@ OrgChart.defaultProps = {
   menuComponent: undefined,
   moveToActiveComponent: undefined,
   onMoveToActiveClick: undefined,
-  moveToActiveText: '',
+  moveToActiveText: "",
   hideMenuComponent: false,
 };
 
@@ -385,19 +364,23 @@ OrgChart.propTypes = {
   /** Fired when buttons on cards are clicked  */
   onButtonClick: PropTypes.func,
   /** Array of cards to draw */
-  cards: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    node: nodeShape,
-  })),
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      node: nodeShape,
+    })
+  ),
   /** Array of lines to draw */
-  lines: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    x1: PropTypes.number,
-    y1: PropTypes.number,
-    x2: PropTypes.number,
-    y2: PropTypes.number,
-    on_path: PropTypes.bool,
-  })),
+  lines: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      x1: PropTypes.number,
+      y1: PropTypes.number,
+      x2: PropTypes.number,
+      y2: PropTypes.number,
+      on_path: PropTypes.bool,
+    })
+  ),
   /** Styles to pass along to root div */
   style: PropTypes.shape({}),
   /** Width of cards (will be REMOVED) */
@@ -416,18 +399,22 @@ OrgChart.propTypes = {
   /** Currently selected node for minichart */
   miniSelectedNode: nodeShape,
   /** Array of cards to draw on minichart */
-  miniCards: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    node: nodeShape,
-  })),
+  miniCards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      node: nodeShape,
+    })
+  ),
   /** Styles to pass along to the overlay div */
   miniOverlayStyle: PropTypes.shape({}),
   /** Array of lines to draw on the minichart */
-  miniLines: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    d: PropTypes.string.isRequired,
-    on_path: PropTypes.bool,
-  })),
+  miniLines: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      d: PropTypes.string.isRequired,
+      on_path: PropTypes.bool,
+    })
+  ),
   /** Styles to pass along to root div of the minichart */
   miniStyle: PropTypes.shape({}),
   /** search component */

@@ -1,13 +1,11 @@
 /* eslint-disable */
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import LocalizedComponent
-  from '@gctools-components/react-i18n-translation-webpack';
+import PropTypes from "prop-types";
 
-import Card from '../Card/Card';
+import Card from "../Card/Card";
 
-import './css/card_container.css';
+import "./css/card_container.css";
 
 class CardContainer extends React.Component {
   constructor() {
@@ -35,7 +33,7 @@ class CardContainer extends React.Component {
     this.scrollToCard(this.props.selectedCard);
     this.enableDrag();
     if (this.props.onScroll && this.container.current) {
-      this.container.current.addEventListener('scroll', this.props.onScroll);
+      this.container.current.addEventListener("scroll", this.props.onScroll);
       this.props.onScroll({ target: this.container.current });
     }
   }
@@ -44,8 +42,7 @@ class CardContainer extends React.Component {
     if (nextProps.selectedCard !== this.props.selectedCard) {
       if (this.props.selectedCard) {
         const obj = this.container.current;
-        const oldCard = this.props.cards
-          .filter(card => card.node === nextProps.selectedCard);
+        const oldCard = this.props.cards.filter((card) => card.node === nextProps.selectedCard);
         if (oldCard.length > 0) {
           const scrollXDiff = oldCard[0].x - obj.scrollLeft;
           const scrollYDiff = oldCard[0].y - obj.scrollTop;
@@ -53,7 +50,7 @@ class CardContainer extends React.Component {
             this.container.current.scrollTo({
               left: nextProps.selectedCard.x - scrollXDiff,
               top: nextProps.selectedCard.y - scrollYDiff,
-              behavior: 'auto'
+              behavior: "auto",
             });
           }, 0);
         } else {
@@ -72,15 +69,14 @@ class CardContainer extends React.Component {
       this.lastSX = undefined;
       this.lastXY = undefined;
       window.requestAnimationFrame(() => {
-        const { width, height } =
-          this.container.current.getBoundingClientRect();
+        const { width, height } = this.container.current.getBoundingClientRect();
         const { cardWidth, cardHeight } = this.props;
-        const x = card.x - ((width / 2) - (cardWidth / 2));
-        const y = card.y - ((height / 2) - (cardHeight / 2));
+        const x = card.x - (width / 2 - cardWidth / 2);
+        const y = card.y - (height / 2 - cardHeight / 2);
         this.container.current.scrollTo({
           top: y,
           left: x,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       });
     }
@@ -88,27 +84,27 @@ class CardContainer extends React.Component {
 
   enableDrag() {
     if (this.container && this.container.current) {
-      this.container.current.addEventListener('mousedown', (e) => {
+      this.container.current.addEventListener("mousedown", (e) => {
         this.lastSX = e.clientX;
         this.lastSY = e.clientY;
         // this.setState({ dragging: true });
         this.dragging = true;
         e.preventDefault();
       });
-      this.container.current.addEventListener('mousemove', (e) => {
+      this.container.current.addEventListener("mousemove", (e) => {
         if (this.dragging) {
           const scroller = this.container.current;
-          scroller.scrollLeft -= (-this.lastSX + (this.lastSX = e.clientX));
+          scroller.scrollLeft -= -this.lastSX + (this.lastSX = e.clientX);
           this.newSX = scroller.scrollLeft;
-          scroller.scrollTop -= (-this.lastSY + (this.lastSY = e.clientY));
+          scroller.scrollTop -= -this.lastSY + (this.lastSY = e.clientY);
           this.newSY = scroller.scrollTop;
         }
       });
-      this.container.current.addEventListener('mouseup', () => {
+      this.container.current.addEventListener("mouseup", () => {
         // this.setState({ dragging: false });
         this.dragging = false;
       });
-      this.container.current.addEventListener('mouseenter', (e) => {
+      this.container.current.addEventListener("mouseenter", (e) => {
         if (this.dragging) {
           if (e.buttons === 0) {
             // this.setState({ dragging: false });
@@ -135,19 +131,14 @@ class CardContainer extends React.Component {
   render() {
     const evaluateString = (str, { node }) => {
       if (!str) return str;
-      return Object.keys(node).reduce(
-        (r, i) => r.replace(`!${i}!`, node[i]),
-        str
-      );
+      return Object.keys(node).reduce((r, i) => r.replace(`!${i}!`, node[i]), str);
     };
 
-    const svgWidth = Math
-      .max(
-        Math.max(...this.props.cards.map(b => b.x)) + this.props.cardWidth,
-        this.oldWidth
-      );
-    const svgHeight =
-      Math.max(this.oldHeight, ...this.props.cards.map(b => b.y));
+    const svgWidth = Math.max(
+      Math.max(...this.props.cards.map((b) => b.x)) + this.props.cardWidth,
+      this.oldWidth
+    );
+    const svgHeight = Math.max(this.oldHeight, ...this.props.cards.map((b) => b.y));
 
     const lines = (
       <svg
@@ -156,12 +147,8 @@ class CardContainer extends React.Component {
           width: svgWidth,
         }}
       >
-        {this.props.lines.map(line => (
-          <path
-            key={line.id}
-            d={line.d}
-            className={(line.on_path) ? 'onPath' : ''}
-          />
+        {this.props.lines.map((line) => (
+          <path key={line.id} d={line.d} className={line.on_path ? "onPath" : ""} />
         ))}
       </svg>
     );
@@ -174,20 +161,17 @@ class CardContainer extends React.Component {
         <Card
           key={card.id}
           cardClickUrl={evaluateString(this.props.cardClickUrl, card)}
-          onCardClick={e => this.cardClick(card, e)}
+          onCardClick={(e) => this.cardClick(card, e)}
           label={evaluateString(this.props.cardLabel, card)}
           buttonTitle={evaluateString(this.props.buttonTitle, card)}
-          onButtonClick={e => this.cardButtonClick(card, e)}
-          avatar={
-            (typeof card.node.avatar === 'string')
-              ? card.node.avatar : undefined
-          }
+          onButtonClick={(e) => this.cardButtonClick(card, e)}
+          avatar={typeof card.node.avatar === "string" ? card.node.avatar : undefined}
           avatarText={evaluateString(this.props.avatarText, card)}
           name={card.node.name}
-          title={(localizer.lang === 'en_CA') ? card.node.titleEn :
-           card.node.titleFr}
-          team={(localizer.lang === 'en_CA') ? card.node.department.en_CA :
-            card.node.department.fr_CA}
+          title={localizer.lang === "en_CA" ? card.node.titleEn : card.node.titleFr}
+          team={
+            localizer.lang === "en_CA" ? card.node.department.en_CA : card.node.department.fr_CA
+          }
           blurred={!card.on_path}
           active={activeCard}
           dragging={this.state.dragging}
@@ -200,11 +184,7 @@ class CardContainer extends React.Component {
     });
     const { style } = this.props;
     return (
-      <div
-        style={style}
-        className="card-container"
-        ref={this.container}
-      >
+      <div style={style} className="card-container" ref={this.container}>
         {lines}
         {cards}
       </div>
@@ -219,8 +199,8 @@ CardContainer.defaultProps = {
   onCardClick: (card, event) => {}, // eslint-disable-line no-unused-vars
   onButtonClick: (card, event) => {}, // eslint-disable-line no-unused-vars
   onScroll: undefined,
-  buttonTitle: '!name!',
-  avatarText: '!name!',
+  buttonTitle: "!name!",
+  avatarText: "!name!",
   cardLabel: undefined,
   cardHeight: 75,
   cardWidth: 300,
@@ -244,23 +224,27 @@ CardContainer.propTypes = {
   /* Event fired when container is scrolled */
   onScroll: PropTypes.func,
   /** Array of cards to draw */
-  cards: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    node: PropTypes.shape({
-      avatar: PropTypes.string,
-      name: PropTypes.string,
-      title: PropTypes.string,
-    }),
-    x: PropTypes.number,
-    y: PropTypes.number,
-    on_path: PropTypes.bool,
-  })),
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      node: PropTypes.shape({
+        avatar: PropTypes.string,
+        name: PropTypes.string,
+        title: PropTypes.string,
+      }),
+      x: PropTypes.number,
+      y: PropTypes.number,
+      on_path: PropTypes.bool,
+    })
+  ),
   /** Array of lines to draw */
-  lines: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    d: PropTypes.string.isRequired,
-    on_path: PropTypes.bool,
-  })),
+  lines: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      d: PropTypes.string.isRequired,
+      on_path: PropTypes.bool,
+    })
+  ),
   /** Styles to pass along to root div */
   style: PropTypes.shape({}),
   /** Width of cards (will be REMOVED) */
@@ -283,4 +267,4 @@ CardContainer.propTypes = {
   }),
 };
 
-export default LocalizedComponent(CardContainer);
+export default CardContainer;

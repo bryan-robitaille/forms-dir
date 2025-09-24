@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Team } from "./Team";
+import { useState } from "react";
 
 const tab =
   "bg-white-default text-gcds-blue-800 visited:text-gcds-blue-800 hover:bg-gcds-blue-100 hover:text-gcds-blue-800 active:border-black";
@@ -15,21 +14,40 @@ enum panelState {
 
 type PanelProps = {
   tab: panelState;
+  TeamView: React.ReactNode;
+  OrgChartView: React.ReactNode;
+  YourTeamsView: React.ReactNode;
+  ApprovalsView: React.ReactNode;
 };
-const Panel = ({ tab }: PanelProps) => {
+const Panel = ({ tab, TeamView, OrgChartView, YourTeamsView, ApprovalsView }: PanelProps) => {
   switch (tab) {
     case panelState.User:
-      return <Team />;
+      return TeamView;
     case panelState.OrgChart:
-      return <div>OrgChart Component</div>;
+      return OrgChartView;
+    case panelState.Teams:
+      return YourTeamsView;
+    case panelState.Approvals:
+      return ApprovalsView;
   }
 };
 
 type ProfilePanelProps = {
   userName: string;
   isSupervisor: boolean;
+  TeamView: React.ReactNode;
+  OrgChartView: React.ReactNode;
+  YourTeamsView: React.ReactNode;
+  ApprovalsView: React.ReactNode;
 };
-export const ProfilePanel = ({ userName, isSupervisor }: ProfilePanelProps) => {
+export const ProfilePanel = ({
+  userName,
+  isSupervisor,
+  TeamView,
+  OrgChartView,
+  YourTeamsView,
+  ApprovalsView,
+}: ProfilePanelProps) => {
   const [tab, setTab] = useState<panelState>(panelState.User);
 
   const userMenu = (
@@ -51,15 +69,32 @@ export const ProfilePanel = ({ userName, isSupervisor }: ProfilePanelProps) => {
     </button>
   );
 
+  const yourTeamsMenu = (
+    <button
+      key="yourTeams"
+      className={tab === panelState.Teams ? activeTab : tab}
+      onClick={() => setTab(panelState.Teams)}
+    >
+      Your Teams
+    </button>
+  );
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex flex-row gap-4 ">
         {userMenu}
+        {isSupervisor && yourTeamsMenu}
         {orgChartMenu}
       </div>
       <div className="bg-gcds-gray-50 flex-grow">
         <div className="my-1 mx-6">
-          <Panel tab={tab} />
+          <Panel
+            tab={tab}
+            TeamView={TeamView}
+            OrgChartView={OrgChartView}
+            YourTeamsView={YourTeamsView}
+            ApprovalsView={ApprovalsView}
+          />
         </div>
       </div>
     </div>

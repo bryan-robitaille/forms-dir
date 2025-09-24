@@ -6,5 +6,6 @@
 @import "./gcforms/header.css";
 @import "./gcforms/toast.css";
 @import "./gcforms/animations.css";
+@import "./dir/org.css";
 
 @config '../tailwind.config.ts';

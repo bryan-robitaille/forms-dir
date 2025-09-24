@@ -1,0 +1,29 @@
+{
+  "yourTeam": {
+    "addTeam": {
+      "titleAdd": "Create a Team",
+      "titleModify": "Update a team",
+      "description": "What is a team? Consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam eratvolutpat. Give your team a name. You can even give your team a custom avatar! You need to briefly describe your team as well.",
+      "enNameInput": "English Team Name",
+      "frNameInput": "French Team Name",
+      "enDescInput": "English Description",
+      "frDescInput": "French Description",
+      "submitAdd": "Create Team",
+      "submitModify": "Update Team"
+    },
+    "addPeople": {
+      "title": "Add People",
+      "description": "Consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam eratvolutpat.",
+      "select": "Select"
+    },
+    "teams": {
+      "title": "Teams",
+      "defaultDescription": "This system generated team is composed of people who selected you as their supervisor.",
+      "editTeam": "Edit Team",
+      "deleteTeam": "Delete Team"
+    },
+    "members": {
+      "title": "People"
+    }
+  }
+}

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { getTeam } from "../actions";
-import { useParams } from "next/navigation";
-
+import { prisma } from "@lib/prisma";
+import Link from "next/link";
+import Image from "next/image";
 type User = {
   id: string;
   name: string;
@@ -21,7 +20,7 @@ type Team = {
 
 const ProfileCard = ({ user }: { user: User }) => {
   return (
-    <a href={`/en/profile/${user.id}`}>
+    <Link href={`/en/profile/${user.id}`}>
       <div className="flex flex-row gap-2">
         <div className="self-center">
           <img
@@ -35,7 +34,7 @@ const ProfileCard = ({ user }: { user: User }) => {
           <small className="text-muted">{user.titleEn}</small>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 
@@ -46,7 +45,7 @@ const TeamCard = ({ team }: { team: Team }) => {
         <img
           className="w-10 h-10 rounded-full ring-6 ring-gray-300 dark:ring-gray-500"
           src={team.avatarUrl}
-          alt="Profile Avatar"
+          alt="Team Avatar"
         />
       </div>
       <div className="ml-2">
@@ -103,45 +102,75 @@ const PeopleList = ({ people }: { people: User[] }) => {
   );
 };
 
-export const Team = () => {
-  const [team, setTeam] = useState<Team>();
-  const [supervisor, setSupervisor] = useState<User>();
-  const [teamMembers, setTeamMembers] = useState<User[]>([]);
-  const params = useParams<{ profileId: string | string[] }>();
-  useEffect(() => {
-    const profileId = Array.isArray(params.profileId) ? params.profileId[0] : params.profileId;
-    console.info(`UserID is: ${profileId}`);
-    getTeam(profileId).then((data) => {
-      if (data && data.team) {
-        setSupervisor({
-          id: data.team.owner.id,
-          name: data?.team.owner.name,
-          titleEn: data.team?.owner.titleEn,
-          titleFr: data.team?.owner.titleFr,
-          avatarUrl: data.team?.owner.avatarUrl ?? "/images/avatar-default.svg",
-        });
-        setTeam({
-          id: data?.team.id,
-          nameEn: data?.team.nameEn,
-          nameFr: data?.team.nameFr,
-          avatarUrl: data.team.avatarUrl ?? "/images/avatar-default.svg",
-          organizationEn: data.team.organization.nameEn,
-          organizationFr: data.team.organization.nameFr,
-        });
-        setTeamMembers(
-          data.team.members.map((person) => {
-            return {
-              id: person.id,
-              name: person.name,
-              titleEn: person.titleEn,
-              titleFr: person.titleFr,
-              avatarUrl: person.avatarUrl ?? "/images/avatar-default.svg",
-            };
-          })
-        );
-      }
-    });
-  }, []);
+type TeamProps = {
+  profileId: string;
+};
+
+export const Team = async ({ profileId }: TeamProps) => {
+  const data = await prisma.profile.findFirst({
+    where: {
+      id: profileId,
+    },
+    include: {
+      team: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameFr: true,
+          avatarUrl: true,
+          organization: true,
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              avatarUrl: true,
+              titleEn: true,
+              titleFr: true,
+            },
+          },
+          members: {
+            select: {
+              id: true,
+              name: true,
+              avatarUrl: true,
+              titleEn: true,
+              titleFr: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!data || data.team === null) {
+    return <div>No Profile Available</div>;
+  }
+
+  const team = {
+    id: data.team.id,
+    nameEn: data.team.nameEn,
+    nameFr: data.team.nameFr,
+    avatarUrl: data.team.avatarUrl ?? "/images/avatar-default.svg",
+    organizationEn: data.team.organization.nameEn,
+    organizationFr: data.team.organization.nameFr,
+  };
+  const supervisor = {
+    id: data.team.owner.id,
+    name: data.team.owner.name,
+    titleEn: data.team.owner.titleEn,
+    titleFr: data.team.owner.titleFr,
+    avatarUrl: data.team.owner.avatarUrl ?? "/images/avatar-default.svg",
+  };
+  const teamMembers = data.team.members.map((person) => {
+    return {
+      id: person.id,
+      name: person.name,
+      titleEn: person.titleEn,
+      titleFr: person.titleFr,
+      avatarUrl: person.avatarUrl ?? "/images/avatar-default.svg",
+    };
+  });
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-row gap-10 pb-2 mb-6 border-b-1 border-gray-300">

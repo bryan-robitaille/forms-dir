@@ -39,6 +39,7 @@ async function seed() {
             create: {
               nameEn: "Default Team",
               nameFr: "Équipe par défaut",
+              defaultTeam: true,
               organization: { connect: { id: organization.id } },
             },
           },
